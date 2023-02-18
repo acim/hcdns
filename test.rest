@@ -1,0 +1,46 @@
+@token = {{$processEnv TOKEN}}
+@exampleZoneName = {{$processEnv EXAMPLE_ZONE_NAME}}
+@exampleZoneId = {{$processEnv EXAMPLE_ZONE_ID}}
+@exampleHcRecordId = {{$processEnv EXAMPLE_RECORD_ID}}
+@json = application/json
+
+### List zones
+GET https://dns.hetzner.com/api/v1/zones HTTP/1.1
+auth-api-token: {{token}}
+
+### List zones by name
+GET https://dns.hetzner.com/api/v1/zones?name={{exampleZoneName}} HTTP/1.1
+auth-api-token: {{token}}
+
+### List zones by keyword
+GET https://dns.hetzner.com/api/v1/zones?search_name=net HTTP/1.1
+auth-api-token: {{token}}
+
+### Get zone
+GET https://dns.hetzner.com/api/v1/zones/{{exampleZoneId}} HTTP/1.1
+auth-api-token: {{token}}
+
+### Create zone
+POST https://dns.hetzner.com/api/v1/zones HTTP/1.1
+auth-api-token: {{token}}
+content-type: {{json}}
+
+{
+    "name": "hcdns-test.com"
+}
+
+### Delete zone
+DELETE https://dns.hetzner.com/api/v1/zones/5Lsy5w2yLwFmxPUUeAPrMM HTTP/1.1
+auth-api-token: {{token}}
+
+### List zone records
+GET https://dns.hetzner.com/api/v1/records?zone_id={{exampleZoneId}} HTTP/1.1
+auth-api-token: {{token}}
+
+### Get zone record
+GET https://dns.hetzner.com/api/v1/records/7f878d6cfe8da5ad02dc98e17ec866c3 HTTP/1.1
+auth-api-token: {{token}}
+
+### Retrieve an existing domain record
+GET https://dns.hetzner.com/api/v1/records/{{exampleHcRecordId}} HTTP/1.1
+auth-api-token: {{token}}

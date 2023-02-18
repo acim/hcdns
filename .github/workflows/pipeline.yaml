@@ -1,0 +1,12 @@
+name: pipeline
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    uses: ectobit/reusable-workflows/.github/workflows/go-check.yaml@main
+    with:
+      test-command: make test
