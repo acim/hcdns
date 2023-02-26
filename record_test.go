@@ -9,7 +9,7 @@ import (
 	"go.acim.net/hcdns"
 )
 
-func TestUpdateAndDelete(t *testing.T) {
+func TestUpdateAndDelete(t *testing.T) { //nolint:cyclop
 	t.Parallel()
 
 	if testing.Short() {
