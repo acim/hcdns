@@ -5,7 +5,7 @@
 [![Go Report](https://goreportcard.com/badge/go.acim.net/hcdns)](https://goreportcard.com/report/go.acim.net/hcdns)
 ![Go Coverage](https://img.shields.io/badge/coverage-77.8%25-brightgreen?style=flat&logo=go)
 
-Go client library for [Hetzner Cloud DNS API](https://dns.hetzner.com/api-docs).
+Go client library for [Hetzner DNS API](https://dns.hetzner.com/api-docs).
 
 ## License
 
