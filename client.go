@@ -155,7 +155,9 @@ func (c *Client) do(ctx context.Context, method, path string, body io.Reader, qu
 		return nil, fmt.Errorf("do request: %w", err)
 	}
 
-	defer res.Body.Close()
+	defer func() {
+		err = errors.Join(err, res.Body.Close())
+	}()
 
 	if res.StatusCode == http.StatusOK || res.StatusCode == http.StatusCreated || res.StatusCode != http.StatusNotFound {
 		var root root
