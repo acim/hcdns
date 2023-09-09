@@ -97,7 +97,8 @@ func (z *Zone) Records(ctx context.Context) ([]Record, error) {
 		page = root.Meta.Pagination.NextPage
 	}
 
-	for _, r := range records {
+	for i := range records {
+		r := &records[i]
 		r.c = z.c
 		r.zoneID = r.ID
 	}
