@@ -71,7 +71,8 @@ func (c *Client) ZonesByKeyword(ctx context.Context, keyword string) ([]Zone, er
 		page = root.Meta.Pagination.NextPage
 	}
 
-	for _, z := range zones {
+	for i := range zones {
+		z := &zones[i]
 		z.c = c
 	}
 
