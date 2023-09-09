@@ -64,7 +64,7 @@ type RecordType string
 
 const (
 	A     RecordType = "A"
-	AAA   RecordType = "AAAA"
+	AAAA  RecordType = "AAAA"
 	NS    RecordType = "NS"
 	MX    RecordType = "MX"
 	CNAME RecordType = "CNAME"
