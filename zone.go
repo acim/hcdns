@@ -100,7 +100,7 @@ func (z *Zone) Records(ctx context.Context) ([]Record, error) {
 	for i := range records {
 		r := &records[i]
 		r.c = z.c
-		r.zoneID = r.ID
+		r.zoneID = z.ID
 	}
 
 	return records, nil
