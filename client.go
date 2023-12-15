@@ -160,7 +160,7 @@ func (c *Client) do(ctx context.Context, method, path string, body io.Reader, qu
 		err = errors.Join(err, res.Body.Close())
 	}()
 
-	if res.StatusCode == http.StatusOK || res.StatusCode == http.StatusCreated || res.StatusCode != http.StatusNotFound {
+	if res.StatusCode == http.StatusOK || res.StatusCode == http.StatusCreated || res.StatusCode == http.StatusNotFound {
 		var root root
 
 		if err := json.NewDecoder(res.Body).Decode(&root); err != nil {
