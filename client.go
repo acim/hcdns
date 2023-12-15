@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -55,7 +56,7 @@ func (c *Client) ZonesByKeyword(ctx context.Context, keyword string) ([]Zone, er
 	}
 
 	for {
-		query.Set("page", fmt.Sprint(page))
+		query.Set("page", strconv.FormatUint(uint64(page), 10))
 
 		root, err := c.do(ctx, http.MethodGet, "zones", http.NoBody, query)
 		if err != nil {
@@ -160,21 +161,17 @@ func (c *Client) do(ctx context.Context, method, path string, body io.Reader, qu
 		err = errors.Join(err, res.Body.Close())
 	}()
 
-	if res.StatusCode == http.StatusOK || res.StatusCode == http.StatusCreated || res.StatusCode != http.StatusNotFound {
-		var root root
+	var root root
 
-		if err := json.NewDecoder(res.Body).Decode(&root); err != nil {
-			return nil, fmt.Errorf("decode: %w", err)
-		}
-
-		if root.Error.Code == http.StatusNotFound {
-			return nil, fmt.Errorf("%w: %s", ErrStatus, root.Error.Message)
-		}
-
-		return &root, nil
+	if err := json.NewDecoder(res.Body).Decode(&root); err != nil {
+		return nil, errors.Join(err, fmt.Errorf("%w: %s", ErrStatus, res.Status))
 	}
 
-	return nil, fmt.Errorf("%w: %s", ErrStatus, res.Status)
+	if root.Error.Code >= http.StatusBadRequest {
+		return nil, fmt.Errorf("%w: %s", ErrStatus, root.Error.Message)
+	}
+
+	return &root, nil
 }
 
 func WithClient(hc *http.Client) Option {

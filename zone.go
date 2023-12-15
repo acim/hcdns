@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -78,10 +79,10 @@ func (z *Zone) Records(ctx context.Context) ([]Record, error) {
 		page    uint = 1
 	)
 
-	query.Set("zone_id", fmt.Sprint(z.ID))
+	query.Set("zone_id", z.ID)
 
 	for {
-		query.Set("page", fmt.Sprint(page))
+		query.Set("page", strconv.FormatUint(uint64(page), 10))
 
 		root, err := z.c.do(ctx, http.MethodGet, "records", http.NoBody, query)
 		if err != nil {
