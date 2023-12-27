@@ -2,6 +2,7 @@ package hcdns
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"time"
 )
