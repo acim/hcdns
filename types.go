@@ -43,7 +43,7 @@ func (t *Time) UnmarshalJSON(b []byte) error {
 	}
 
 	trimmedTime := removeMonotonicTime(value)
-	tt, err := time.Parse("2006-01-02 15:04:05.999 -0700 MST", value)
+	tt, err := time.Parse("2006-01-02 15:04:05.999 -0700 MST", trimmedTime)
 	if err != nil {
 		return fmt.Errorf("parse time: %w", err)
 	}
