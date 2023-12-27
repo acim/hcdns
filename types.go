@@ -42,6 +42,7 @@ func (t *Time) UnmarshalJSON(b []byte) error {
 		return nil
 	}
 
+	trimmedTime := removeMonotonicTime(value)
 	tt, err := time.Parse("2006-01-02 15:04:05.999 -0700 MST", value)
 	if err != nil {
 		return fmt.Errorf("parse time: %w", err)
@@ -54,4 +55,14 @@ func (t *Time) UnmarshalJSON(b []byte) error {
 
 func (t Time) String() string {
 	return t.inner.Format(time.RFC3339)
+}
+
+func removeMonotonicTime(inputString string) string {
+	// Define the regular expression pattern
+	pattern := regexp.MustCompile(` m=.+$`)
+
+	// Replace the matched part with an empty string
+	trimmedString := pattern.ReplaceAllString(inputString, "")
+
+	return trimmedString
 }
