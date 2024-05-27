@@ -7,11 +7,13 @@ import (
 )
 
 type root struct {
-	Zones   []Zone   `json:"zones"`
-	Zone    Zone     `json:"zone"`
-	Records []Record `json:"records"`
-	Record  Record   `json:"record"`
-	Meta    struct {
+	Zones          []Zone          `json:"zones"`
+	Zone           Zone            `json:"zone"`
+	Records        []Record        `json:"records"`
+	Record         Record          `json:"record"`
+	PrimaryServers []PrimaryServer `json:"primary_servers"`
+	PrimaryServer  PrimaryServer   `json:"primary_server"`
+	Meta           struct {
 		Pagination pagination `json:"pagination"`
 	} `json:"meta"`
 	Error err `json:"error"`
@@ -54,4 +56,13 @@ func (t *Time) UnmarshalJSON(b []byte) error {
 
 func (t Time) String() string {
 	return t.inner.Format(time.RFC3339)
+}
+
+type PrimaryServer struct {
+	Port     int       `json:"port"`
+	ID       string    `json:"id"`
+	Created  time.Time `json:"created"`
+	Modified time.Time `json:"modified"`
+	ZoneID   string    `json:"zone_id"`
+	Address  string    `json:"address"`
 }

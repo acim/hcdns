@@ -40,7 +40,7 @@ func (r *Record) UpdateValueAndTTL(ctx context.Context, value string, ttl time.D
 		return fmt.Errorf("encode: %w", err)
 	}
 
-	root, err := r.c.do(ctx, http.MethodPut, fmt.Sprintf("records/%s", r.ID), bytes.NewBuffer(json), nil)
+	root, err := r.c.do(ctx, http.MethodPut, "records/"+r.ID, bytes.NewBuffer(json), nil)
 	if err != nil {
 		return fmt.Errorf("request: %w", err)
 	}
@@ -52,7 +52,7 @@ func (r *Record) UpdateValueAndTTL(ctx context.Context, value string, ttl time.D
 }
 
 func (r *Record) Delete(ctx context.Context) error {
-	_, err := r.c.do(ctx, http.MethodDelete, fmt.Sprintf("records/%s", r.ID), http.NoBody, nil)
+	_, err := r.c.do(ctx, http.MethodDelete, "records/"+r.ID, http.NoBody, nil)
 	if err != nil {
 		return fmt.Errorf("request: %w", err)
 	}
