@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -48,14 +49,14 @@ func (c *Client) ZonesByKeyword(ctx context.Context, keyword string) ([]Zone, er
 	)
 
 	if keyword != "" {
-		query = make(url.Values, 2) //nolint:gomnd
+		query = make(url.Values, 2) //nolint:mnd
 		query.Set("search_name", keyword)
 	} else {
 		query = make(url.Values, 1)
 	}
 
 	for {
-		query.Set("page", fmt.Sprint(page))
+		query.Set("page", strconv.FormatUint(uint64(page), 10))
 
 		root, err := c.do(ctx, http.MethodGet, "zones", http.NoBody, query)
 		if err != nil {
@@ -80,7 +81,7 @@ func (c *Client) ZonesByKeyword(ctx context.Context, keyword string) ([]Zone, er
 }
 
 func (c *Client) Zone(ctx context.Context, id string) (*Zone, error) {
-	root, err := c.do(ctx, http.MethodGet, fmt.Sprintf("zones/%s", id), http.NoBody, nil)
+	root, err := c.do(ctx, http.MethodGet, "zones/"+id, http.NoBody, nil)
 	if err != nil {
 		return nil, fmt.Errorf("request: %w", err)
 	}
@@ -141,7 +142,7 @@ func (c *Client) do(ctx context.Context, method, path string, body io.Reader, qu
 		return nil, fmt.Errorf("new request: %w", err)
 	}
 
-	req.Header.Set("Auth-API-Token", c.token)
+	req.Header.Set("Auth-Api-Token", c.token)
 
 	if body != http.NoBody {
 		req.Header.Set("Content-Type", "application/json")

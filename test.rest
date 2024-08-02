@@ -44,3 +44,7 @@ auth-api-token: {{token}}
 ### Retrieve an existing domain record
 GET https://dns.hetzner.com/api/v1/records/{{exampleHcRecordId}} HTTP/1.1
 auth-api-token: {{token}}
+
+### List all primary servers
+GET https://dns.hetzner.com/api/v1/primary_servers/{{exampleZoneId}} HTTP/1.1
+auth-api-token: {{token}}

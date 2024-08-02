@@ -3,17 +3,9 @@
 lint:
 	@golangci-lint run \
 		--enable-all \
-		--disable deadcode \
-		--disable exhaustivestruct \
-		--disable golint \
-		--disable ifshort \
-		--disable interfacer \
-		--disable maligned \
-		--disable nosnakecase \
-		--disable scopelint \
-		--disable structcheck \
-		--disable tagliatelle \
-		--disable varcheck
+		--disable execinquery \
+		--disable gomnd \
+		--disable tagliatelle
 
 test:
 	@go test -race -short ./...

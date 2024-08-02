@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -52,7 +53,7 @@ func (z *Zone) UpdateDefaultTTL(ctx context.Context, ttl time.Duration) error {
 		return fmt.Errorf("encode: %w", err)
 	}
 
-	root, err := z.c.do(ctx, http.MethodPut, fmt.Sprintf("zones/%s", z.ID), bytes.NewBuffer(json), nil)
+	root, err := z.c.do(ctx, http.MethodPut, "zones/"+z.ID, bytes.NewBuffer(json), nil)
 	if err != nil {
 		return fmt.Errorf("request: %w", err)
 	}
@@ -63,7 +64,7 @@ func (z *Zone) UpdateDefaultTTL(ctx context.Context, ttl time.Duration) error {
 }
 
 func (z *Zone) Delete(ctx context.Context) error {
-	_, err := z.c.do(ctx, http.MethodDelete, fmt.Sprintf("zones/%s", z.ID), http.NoBody, nil)
+	_, err := z.c.do(ctx, http.MethodDelete, "zones/"+z.ID, http.NoBody, nil)
 	if err != nil {
 		return fmt.Errorf("request: %w", err)
 	}
@@ -74,14 +75,14 @@ func (z *Zone) Delete(ctx context.Context) error {
 func (z *Zone) Records(ctx context.Context) ([]Record, error) {
 	var (
 		records []Record
-		query        = make(url.Values, 2) //nolint:gomnd
+		query        = make(url.Values, 2) //nolint:mnd
 		page    uint = 1
 	)
 
-	query.Set("zone_id", fmt.Sprint(z.ID))
+	query.Set("zone_id", z.ID)
 
 	for {
-		query.Set("page", fmt.Sprint(page))
+		query.Set("page", strconv.FormatUint(uint64(page), 10))
 
 		root, err := z.c.do(ctx, http.MethodGet, "records", http.NoBody, query)
 		if err != nil {
@@ -107,7 +108,7 @@ func (z *Zone) Records(ctx context.Context) ([]Record, error) {
 }
 
 func (z *Zone) Record(ctx context.Context, id string) (*Record, error) {
-	root, err := z.c.do(ctx, http.MethodGet, fmt.Sprintf("records/%s", id), http.NoBody, nil)
+	root, err := z.c.do(ctx, http.MethodGet, "records/"+id, http.NoBody, nil)
 	if err != nil {
 		return nil, fmt.Errorf("request: %w", err)
 	}
@@ -157,6 +158,19 @@ func (z *Zone) createNSRecords(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+func (z *Zone) PrimaryServers(ctx context.Context) ([]PrimaryServer, error) {
+	query := make(url.Values, 1)
+
+	query.Set("zone_id", z.ID)
+
+	root, err := z.c.do(ctx, http.MethodGet, "primary_servers", http.NoBody, query)
+	if err != nil {
+		return nil, fmt.Errorf("request: %w", err)
+	}
+
+	return root.PrimaryServers, nil
 }
 
 type zoneReq struct {
